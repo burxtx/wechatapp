@@ -1,0 +1,19 @@
+{% extends "polls/base.html" %}
+{% block title %}测测你的睡仙指数{% endblock %}
+{% block body %}
+<form>
+    <div>
+        <span>性别：</span>
+        <input type="radio" name="gender" value="1"> 男
+        <input type="radio" name="gender" value="0"> 女
+    </div>
+    <div>
+        <span>年龄：</span>
+        <input type="radio" name="age" value="1">大于35岁
+        <input type="radio" name="age" value="0">小于35岁
+    </div>
+    <div>
+        <button type="submit" action="{% url 'polls:question' %}?pid=1&qindex=1">开始测试</button>
+    </div>
+</form>
+{% endblock %}

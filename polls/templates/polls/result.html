@@ -1,0 +1,21 @@
+{% extends "polls/base.html" %}
+{% block title %}测测你的睡仙指数{% endblock %}
+{% block body %}
+    <div>
+        <div id="{{}}">
+            <div class='total'>{{}}</div>
+            <span></span>
+        </div>
+        
+        <script type="text/javascript">
+            $(".vote").onclick(function(){
+                var choiceId = $(this).attr("id");
+                var data = {"id": choiceId}
+                $.post(url, data 
+                    function(){
+                    window.location.assign("{url 'polls:question'"+(choiceId+1)+" }")
+                });
+            });
+        </script>
+    </div>
+{% endblock %}

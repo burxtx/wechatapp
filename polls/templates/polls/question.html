@@ -1,0 +1,54 @@
+{% extends "polls/base.html" %}
+{% block title %}测测你的睡仙指数{% endblock %}
+{% block body %}
+    <div>
+        <div id="{{q.index}}" class="questionIndex">{{ q.question_desc }}</div>
+        <div id="{{q.id}}" class="question_id" type="hidden"></div>
+        <form>
+        {% csrf_token %}
+        {% for choice in c %}
+            <div>
+                <div>
+                    <input class="vote" id="{{choice.id}}" name="vote" type="radio" value="0">
+                </div>
+                <div>{{ choice.choice_desc }}</div>
+            </div>
+        {% endfor %}
+        </form>
+    </div>
+    <script type="text/javascript">
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        $(".vote").click(function(){
+            var choiceId = $(this).attr("id");
+            var qId = $(".question_id").attr("id");
+            var qIndex = $(".question_index");
+            var data = {
+                "qid": qId,
+                "cid": choiceId,
+                "csrfmiddlewaretoken": csrftoken
+            };
+            var url = "{% url 'polls:question' %}?pid=1&qindex="+qIndex;
+            $.post(url, data,
+                function(){
+                window.location.assign("{% url 'polls:question' %}?pid=1&qindex="+(qIndex+1))
+            });
+        });
+    </script>
+{% endblock %}

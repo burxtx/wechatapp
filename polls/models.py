@@ -59,9 +59,6 @@ class PollUser(models.Model):
         (LT35, 'Large'),
         (ST35, 'Small'),
         )
-    poll = models.ManyToManyField(Poll)
-    question = models.ManyToManyField(Question)
-    choice = models.ManyToManyField(Choice)
     # username = models.CharField()
     age = models.IntegerField(choices=AGE_CHOICE, null=True, blank=True)
     gender = models.IntegerField(choices=GENDER_CHOICE, null=True, blank=True)
@@ -78,3 +75,13 @@ class PollUser(models.Model):
     subscribe_time = models.DateTimeField(null=True, blank=True)
     def __unicode__(self):
         return '%s, %s' % (self.age, self.gender)
+ 
+class Answer(models.Model):
+    """docstring for Answer"""
+    pid = models.ForeignKey(Poll)
+    qid = models.ForeignKey(Question)
+    cid = models.ForeignKey(Choice)
+    uid = models.ForeignKey(PollUser)
+    #add answer date and time
+    def __unicode__(self):
+        return self.cid
