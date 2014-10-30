@@ -1,0 +1,20 @@
+<html>
+<head>
+    <title>测测你的睡仙指数</title>
+</head>
+<body>
+    <div>
+        <span>性别：</span>
+        <input type="radio" value="1"> 男
+        <input type="radio" value="0"> 女
+    </div>
+    <div>
+        <span>年龄：</span>
+        <input type="radio" value="1">大于35岁
+        <input type="radio" value="0">小于35岁
+    </div>
+    <div>
+        <a href="{% url "polls:question" q.id %}">开始测试</a>
+    </div>
+</body>
+</html>
