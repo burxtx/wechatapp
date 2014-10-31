@@ -25,9 +25,9 @@ $(".vote").click(function(){
         "cid": choiceId,
         "csrfmiddlewaretoken": csrftoken
     };
-    var url = "{% url 'polls:question' %}?qid="+qIndex;
+    var url = "{% url 'polls:question' %}?pid=1&qindex="+qIndex;
     $.post(url, data,
         function(){
-        window.location.assign("{% url 'polls:question' %}?pid=1&qid="+(qIndex+1))
+        window.location.assign("{% url 'polls:question' %}?pid=1&qindex="+(qIndex+1))
     });
 });

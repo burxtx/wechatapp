@@ -39,7 +39,7 @@ class Choice(models.Model):
     question = models.ForeignKey(Question)
     choice_desc = models.CharField(max_length=100)
     cindex = models.IntegerField(choices=OPTION_CHOICE, null=True, blank=True, verbose_name="index")
-    votes = models.IntegerField(null=True, blank=True)
+    votes = models.IntegerField(default=0, null=True, blank=True)
     optional_text = models.CharField(max_length=300, null=True, blank=True)
     score = models.IntegerField(null=True, blank=True)
     def __unicode__(self):
@@ -63,16 +63,17 @@ class PollUser(models.Model):
     age = models.IntegerField(choices=AGE_CHOICE, null=True, blank=True)
     gender = models.IntegerField(choices=GENDER_CHOICE, null=True, blank=True)
 
-    subscribe = models.IntegerField()
+    # subscribe = models.IntegerField()
     openid = models.CharField(max_length=500, null=True, blank=True)
     nickname = models.CharField(max_length=200, null=True, blank=True)
     sex = models.IntegerField(null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
     country = models.CharField(max_length=100, null=True, blank=True)
     province = models.CharField(max_length=100, null=True, blank=True)
-    language = models.CharField(max_length=100, null=True, blank=True)
+    # language = models.CharField(max_length=100, null=True, blank=True)
     headimgurl = models.CharField(max_length=500, null=True, blank=True)
-    subscribe_time = models.DateTimeField(null=True, blank=True)
+    privilege = models.CharField(max_length=200, null=True, blank=True)
+    # subscribe_time = models.DateTimeField(null=True, blank=True)
     def __unicode__(self):
         return '%s, %s' % (self.age, self.gender)
  
@@ -82,6 +83,7 @@ class Answer(models.Model):
     qid = models.ForeignKey(Question)
     cid = models.ForeignKey(Choice)
     uid = models.ForeignKey(PollUser)
+    submit_time = models.DateTimeField(auto_now_add=True)
     #add answer date and time
     def __unicode__(self):
         return self.cid
