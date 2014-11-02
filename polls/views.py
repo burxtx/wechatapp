@@ -28,49 +28,47 @@ def home_page(request):
             u.save()
             # json = simplejson.dumps({'success': True})
             # return HttpResponse(json, mimetype='application/json')
-        return HttpResponseRedirect("/wechatapp/polls/question?pid=1&qindex=1")
+        return HttpResponseRedirect("/wechatapp/polls/question?pid=1&qid=1")
     if request.method=="GET":
         openid = request.GET.get("openid")
         u, created = PollUser.objects.get_or_create(openid="openid")
-        # RequestContext(request)
-        return render_to_response('polls/home.html',context_instance=RequestContext(request))
-        
-def answer_question(request):
-    if request.method=="GET":
+
         pid = request.GET.get("pid")
         # q = Question.objects.get(poll=pid, qindex=qindex)
         q = Question.objects.filter(poll=pid)
-        p = Poll.objects.get(pk=pid)
-        qnum = Question.objects.filter(poll=q.poll.id).count()
+        num = Question.objects.filter(poll=pid).count()
+        # p = Poll.objects.get(pk=pid)
 
-        c = Choice.objects.filter(question=q)
+        # c = Choice.objects.filter(question=q)
         variables=RequestContext(request, {
-            "p": p,
+            # "p": p,
             "q": q,
-            "c": c,
-            "qnum":len(q),
+            # "c": c,
+            "num":len(q),
         })
-        if q.qindex <= qnum:
-            return render_to_response("polls/question.html", variables)
-        else:
-            return HttpResponseRedirect("/polls/result")
-    # if request.method=="GET":
-    #     qindex = request.GET.get("qindex")
-    #     pid = request.GET.get("pid")
-    #     q = Question.objects.get(poll=pid, qindex=qindex)
-    #     p = Poll.objects.get(pk=q.poll.id)
-    #     qnum = Question.objects.filter(poll=q.poll.id).count()
+        # RequestContext(request)
+        # return render_to_response('polls/home.html',context_instance=RequestContext(request))
+        return render_to_response('polls/home.html', variables)
+def get_question(request):
+    if request.method=="GET":
+        pid = request.GET.get("pid")
+        # qid = request.GET.get("qid")
+        # q = Question.objects.get(poll=pid, qindex=qindex)
+        q = Question.objects.filter(poll=pid)
+        num = Question.objects.filter(poll=pid).count()
+        # question = Question.objects.get(pk=qid)
+        # choices = Choice.objects.filter(question=qid)
+        # p = Poll.objects.get(pk=pid)
+        qid_list = [question.id for question in q]
+        # c = Choice.objects.filter(question=q)
+        variables=RequestContext(request, {
+            "q": qid_list,
+            # "c": c,
+            "num":len(q),
+        })
+        return render_to_response("polls/question_gen.html", variables)
 
-    #     c = Choice.objects.filter(question=q)
-    #     variables=RequestContext(request, {
-    #         "p": p,
-    #         "q": q,
-    #         "c": c,
-    #     })
-    #     if q.qindex <= qnum:
-    #         return render_to_response("polls/question.html", variables)
-    #     else:
-    #         return HttpResponseRedirect("/polls/result")
+def answer_question(request):
     if request.method=="POST":
         pid = request.POST["pid"]
         qid = request.POST["qid"]
@@ -87,7 +85,15 @@ def answer_question(request):
         json = simplejson.dumps({'success': True})
         return HttpResponse(json, mimetype="application/json")
         # return HttpResponseRedirect("/polls/question/%d" % qid)
-
+    if request.method=="GET":
+        qid = request.GET["qid"]
+        q = Question.objects.get(pk=qid)
+        choices = Choice.objects.filter(question=qid)
+        variables = RequestContext(request, {
+            "choices": choices,
+            "q": q,
+            })
+        return render_to_response("polls/question.html", variables)
 def get_result(request):
     '''获取poll下面uid每一个最近的选项作为计分项'''
     if request.method=="GET":

@@ -1,6 +1,10 @@
 {% extends "polls/base.html" %}
 {% block title %}测测你的睡仙指数{% endblock %}
 {% block body %}
+<script>
+    $("body").data("q", {{q}});
+    $("body").data("num", {{num}});
+</script>
 <div class="poll">
 <form method="post" action=""role="form">
 {% csrf_token %}
@@ -15,7 +19,7 @@
         <input type="radio" name="age" value="0">小于35岁
     </div>
     <!-- <button type="submit" action="{% url 'polls:question' %}?pid=1&qindex=1">开始测试</button> -->
-    <button type="submit" action="{% url 'polls:home' %}" value="submit">开始测试</button>
+    <button type="submit" action="{% url 'polls:question' %}?pid=1&qid=1" value="submit">开始测试</button>
 </form>
 </div>
 {% endblock %}
