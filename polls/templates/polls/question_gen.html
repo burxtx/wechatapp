@@ -1,0 +1,62 @@
+{% extends "polls/base.html" %}
+{% block title %}测测你的睡仙指数{% endblock %}
+{% block body %}
+    <div class="poll">
+        <div class="question">
+            {% include "polls/question.html" %}
+        </div>
+    </div>
+    <script type="text/javascript">
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+        var i=0;
+        var num={{ num }};
+        var q = {{ q }};
+        if (i==0){
+            $(".question").load("{% url 'polls:answer_question' %}?pid=1&qid="+q[0]);
+        }
+        function getNext(q, i){
+            // alert("hello");
+            var choiceId = $(this).attr("id");
+            var qId = $(".question_id").attr("id");
+            // var qIndex = $(".question_index").attr("id");
+            var data = {
+                "qid": qId,
+                "cid": choiceId,
+                "csrfmiddlewaretoken": csrftoken
+            };
+            var url = "{% url 'polls:answer_question' %}?pid=1&qid="+q[i];
+            if (i<num){alert("hello");
+                        $(".question").load("{% url 'polls:answer_question' %}?pid=1&qid="+q[i+1]);
+                        i++;
+                    }else{
+                        window.location.assign("{% url 'polls:result' %}")
+                    }
+            // $.post(url, data,
+            //     function(){
+            //         if (i<num){
+            //             $(".question").load("{% url 'polls:answer_question' %}?pid=1&qid="+q[i+1]);
+            //             i++;
+            //         }else{
+            //             window.location.assign("{% url 'polls:result' %}")
+            //         }
+            //     });
+        }
+        $("input:radio").click(getNext(q, i));
+    </script>
+{% endblock %}
