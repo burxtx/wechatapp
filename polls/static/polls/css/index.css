@@ -1,0 +1,141 @@
+.wrap{
+    width: 100%;
+    /*height: 100%;*/
+    /*height: 830px;*/
+    background: url(../img/back.png) no-repeat;
+/*把他换成contain*/
+    background-size: cover;
+    overflow: hidden;
+}
+.sex{
+    width: 100%;
+    height: 31%;
+    margin-top: 65%;
+    text-align: center;
+}
+.sex dl dt{
+    float: left;
+    width: 35%;
+    height: 14%;
+    line-height: 14%;
+}
+.sex dl dd a{
+    margin-right: 8%;
+}
+input[type="radio"] {
+    display: none;
+}
+label{
+    float: left;
+    margin-left: 5%;
+}
+.boy_l{
+    display: block;
+    width: 20%;
+    background: url(../img/boy1.png) no-repeat;
+    background-size: contain;
+    height: 3em;
+}
+.lady_l{
+    display: block;
+    width: 20%;
+    background: url(../img/lady1.png) no-repeat;
+    background-size: contain;
+    height: 4em;
+}
+.boy_l1{
+    background: url(../img/boy2.png) no-repeat;
+    background-size: contain;
+}
+.lady_l1{
+    background: url(../img/lady2.png) no-repeat;
+    background-size: contain;
+}
+.big_l{
+    display: block;
+    width: 20%;
+    background: url(../img/big1.png) no-repeat;
+    height: 8em;
+    background-size: contain;
+}
+.little_l{
+    display: block;
+    width: 20%;
+    background: url(../img/little1.png) no-repeat;
+    height: 8em;
+    background-size: contain;
+}
+.big_l1{
+    background: url(../img/big2.png) no-repeat;
+    background-size: contain;
+}
+.little_l1{
+    background: url(../img/little2.png) no-repeat;
+    background-size: contain;
+}
+.on{
+    /*display: block;*/
+    width: 50%;
+    height: 3.5em;
+    background: url(../img/on.png) no-repeat;
+    background-size: contain;
+    margin: 10% auto;
+}
+/*开始答题*/
+.outer{
+    width: 80%;
+    margin: 55% 10% 35% 10%;
+    background: black;
+    opacity: 0.6;
+    border-radius: 3px;
+    overflow: hidden;
+}
+.inner{
+    width: 94%;
+    margin: 3%;
+    border: 1px dashed #797778;
+    border-radius: 4px;
+    /*padding: 2%;*/
+}
+.question,.inner h1,.result{
+    color: white;
+    font-size: 1.2em;
+    line-height: 2em;
+}
+.answer{
+    margin-bottom: 18%;
+    margin-top: 5%;
+    margin-left: 7%;
+}
+.answer input{
+    color: white;
+    font-size: 1.2em;
+    line-height: 2.2em;
+}
+/*结果*/
+.inner h1{
+    margin-left: 2%;
+}
+.result{
+    margin-top: 6%;
+    /*margin-bottom: 5%;*/
+    padding: 0 5%;
+}
+.more,.share{
+    margin-top: -20%;
+    float: left;
+    display: block;
+    width: 31%;
+    height: 4em;
+    margin-bottom: 10%;
+}
+.more{
+    margin-left: 17%;
+    background: url(../img/more.png) no-repeat;
+    background-size: contain;
+}
+.share{
+    margin-left: 5%;
+    background: url(../img/share.png) no-repeat;
+    background-size: contain;
+}

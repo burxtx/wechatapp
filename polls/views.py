@@ -11,8 +11,32 @@ from django.utils import simplejson
 from django.core.urlresolvers import reverse
 from polls.models import *
 import pdb
+import urllib2, json
+from urllib import quote
 
 pdb.set_trace()
+
+def gen_scope_url():
+    APPID = "wx455601ff052bea31" #随手换测试号
+    REDIRECT_URI = quote("yikf.jiutianwai.com/wechatapp/polls/home?pid=1") #调查系统url
+    SCOPE = "snsapi_userinfo"
+    url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect"\
+    % (APPID, REDIRECT_URI, SCOPE)
+    return url
+def gen_access_token_url(code):
+    APPID = "wx455601ff052bea31"
+    SECRET = "647bb7f32155cb2b794337145debf105"
+    CODE = code
+    url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"\
+    % (APPID, SECRET, CODE)
+    return url
+def gen_user_info_url(access_token, openid):
+    url = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN" % (access_token, openid)
+    return url
+def get_json_response(url):
+    response = urllib2.urlopen(url).read()
+    dict_data = json.loads(response)
+    return dict_data
 
 def home_page(request):
     if request.method=="POST":
@@ -30,8 +54,18 @@ def home_page(request):
             # return HttpResponse(json, mimetype='application/json')
         return HttpResponseRedirect("/wechatapp/polls/question?pid=1&qid=1")
     if request.method=="GET":
-        openid = request.GET.get("openid")
-        u, created = PollUser.objects.get_or_create(openid="openid")
+        url = gen_scope_url()
+        print url
+        if "code" in request.GET:
+            code = request.GET.get("code", "")
+            access_token_url = gen_access_token_url(code)
+            dict_data = get_json_response(access_token_url)
+            access_token = dict_data["access_token"]
+            openid = dict_data["openid"]
+            user_info = get_json_response(access_token, openid)
+            request.session["openid"] = openid
+            print openid
+            u, created = PollUser.objects.get_or_create(openid=openid)
 
         pid = request.GET.get("pid")
         # q = Question.objects.get(poll=pid, qindex=qindex)
