@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title></title>
+<link rel="stylesheet" type="text/css" href="/static/polls/css/reset.css">
+<link rel="stylesheet" type="text/css" href="/static/polls/css/index.css">
+</head>
+<body>
+    <div class="wrap">
+        <img src="/static/polls/img/test.png" class="font">
+        <form>
+            <div class="sex clear">
+                <dl>
+                    <dt><img src="/static/polls/img/sex.png" alt=""></dt>
+                    <dd>
+                        <div class="a">
+                            <input type="radio" id="boy" name="gender">
+                            <label for="boy" class="boy_l"></label>
+                        </div>
+                        <div class="a">
+                            <input type="radio" id="lady" name="gender">
+                            <label for="lady" class="lady_l"></label>
+                        </div>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt><img src="/static/polls/img/age.png" alt=""></dt>
+                    <dd>
+                        <div class="b">
+                            <input type="radio" id="big" name="age">
+                            <label for="big" class="big_l"></label>
+                        </div>
+                        <div class="b">
+                            <input type="radio" id="little" name="age">
+                            <label for="little" class="little_l"></label>
+                        </div>
+                    </dd>
+                </dl>
+            </div>
+            <div class="on"></div>
+        </form>
+    </div>
+</body>
+<script src="/static/polls/js/jquery.js"></script>
+<script type="text/javascript">
+    var boy = document.getElementById("boy");
+    var lady = document.getElementById("lady");
+    var big = document.getElementById("big");
+    var little = document.getElementById("little");
+    $(function() {
+        $('.boy_l').click(function(){
+            $(this).addClass("boy_l1");
+            $("#boy").attr("checked","checked");
+            $('.lady_l').removeClass("lady_l1");
+            $("#lady").attr("checked","");
+        });
+        $('.lady_l').click(function(){
+            $(this).addClass("lady_l1");
+            $("#lady").attr("checked","checked");
+            $('.boy_l').removeClass("boy_l1");
+            $("#boy").attr("checked","");
+        });
+        $('.big_l').click(function(){
+            $(this).addClass("big_l1");
+            $("#big").attr("checked","checked");
+            $('.little_l').removeClass("little_l1");
+            $("#little").attr("checked","");
+        });
+        $('.little_l').click(function(){
+            $(this).addClass("little_l1");
+            $("#little").attr("checked","checked");
+            $('.big_l').removeClass("big_l1");
+            $("#big").attr("checked","");
+        });
+        $(".on").click(function(){
+            if(boy.checked == true&&lady.checked == false){
+                if((big.checked == true&&little.checked == false)||(big.checked == false&&little.checked == true)){
+                    doPost();
+                }else{
+                    // window.location.href = "index.html";
+                }
+            }else if(boy.checked == false&&lady.checked == true){
+                if((big.checked == true&&little.checked == false)||(big.checked == false&&little.checked == true)){
+                    doPost();
+                }else{
+                    // window.location.href = "index.html";
+                }
+            }else{
+                // window.location.href = "index.html";
+            }
+        })
+    });
+</script>
+<script>
+    $("body").data("q", {{q}});
+    $("body").data("num", {{num}});
+</script>
+<script type="text/javascript">
+    function doPost(){
+        var q = $("body").data("q");
+        var num = $("body").data("num");
+        var gender = $("input[name='gender'][checked]").val();
+        var age = $("input[name='age'][checked]").val();
+        var url = "{% url 'polls:home' %}"
+        // $.post(url, )
+        window.location.replace("{% url 'polls:question' %}?pid=1")
+    }
+</script>
+</html>

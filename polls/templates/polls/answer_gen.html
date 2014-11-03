@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title></title>
+<link rel="stylesheet" type="text/css" href="/static/polls/css/reset.css">
+<link rel="stylesheet" type="text/css" href="/static/polls/css/index.css">
+<script src="/static/polls/js/jquery.js"></script>
+<!-- <script src="/static/polls/js/ajax.js"></script> -->
+</head>
+<body>
+    <div class="wrap">
+        <img src="/static/polls/img/test.png" class="font">
+        <div class="outer">
+            <div class="inner">
+                {% include "polls/answer.html" %}
+<!--                 <p class="question" id="{{question.id}}">
+                    &nbsp;(&nbsp;<span>{{ question.qindex }}</span>&nbsp;)&nbsp;{{ question.question_desc }}
+                </p>
+                <div class="answer">
+                    {% for choice in choices %}
+                    <div class="clear">
+                        <input id="{{choice.id}}" name="vote" type="radio">
+                        <label>{{ choice.choice_desc }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+ -->
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    // $.getJSON("{% url 'polls:answer_question' %}?pid=1&qid="+q[0],
+    //     $.each(json, function("question", question){
+    //         $(".inner").append('<p class="question" id="{{question.id}}">
+    //                 &nbsp;(&nbsp;<span>{{ question.qindex }}</span>&nbsp;)&nbsp;{{ question.question_desc }}
+    //             </p>')
+    //     })
+    //     )
+</script>
+<script type="text/javascript">
+    $("body").data("i", 0);
+    $("body").data("num", {{ num }});
+    $("body").data("q", {{ q }});
+</script>
+<script type="text/javascript">
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+</html>

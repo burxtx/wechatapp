@@ -8,18 +8,32 @@
 <div class="poll">
 <form method="post" action=""role="form">
 {% csrf_token %}
-    <div>
+    <div class="choice">
         <span>性别：</span>
         <input type="radio" name="gender" value="1"> 男
         <input type="radio" name="gender" value="0"> 女
     </div>
-    <div>
+    <div class="choice">
         <span>年龄：</span>
         <input type="radio" name="age" value="1">大于35岁
         <input type="radio" name="age" value="0">小于35岁
     </div>
     <!-- <button type="submit" action="{% url 'polls:question' %}?pid=1&qindex=1">开始测试</button> -->
-    <button type="submit" action="{% url 'polls:question' %}?pid=1&qid=1" value="submit">开始测试</button>
+    <button type="submit" action="javascript:void(0)" value="submit">开始测试</button>
 </form>
 </div>
+<script type="text/javascript">
+    $("choice").click(function(){
+        $("input").attr("checked","checked");
+    });
+    $("button").click(function(){
+        var q = $("body").data("q");
+        var num = $("body").data("num");
+        var gender = $("input[name='gender']").val();
+        var age = $("input[name='age'][checked]").val();
+        var url = "{% url 'polls:home' %}"
+        // $.post(url, )
+        window.location.replace("{% url 'polls:question' %}?pid=1&qid="+q[0])
+    })
+</script>
 {% endblock %}

@@ -14,11 +14,11 @@ import pdb
 import urllib2, json
 from urllib import quote
 
-pdb.set_trace()
+# pdb.set_trace()
 
 def gen_scope_url():
     APPID = "wx455601ff052bea31" #随手换测试号
-    REDIRECT_URI = quote("yikf.jiutianwai.com/wechatapp/polls/home?pid=1") #调查系统url
+    REDIRECT_URI = quote("http://yikf.jiutianwai.com/wechatapp/polls/home?pid=1") #调查系统url
     SCOPE = "snsapi_userinfo"
     url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect"\
     % (APPID, REDIRECT_URI, SCOPE)
@@ -50,26 +50,27 @@ def home_page(request):
             u.gender = gender
             u.age = age
             u.save()
-            # json = simplejson.dumps({'success': True})
-            # return HttpResponse(json, mimetype='application/json')
-        return HttpResponseRedirect("/wechatapp/polls/question?pid=1&qid=1")
+            json = simplejson.dumps({'success': True})
+            return HttpResponse(json, mimetype='application/json')
+        # return HttpResponseRedirect("/wechatapp/polls/question?pid=1&qid=1")
     if request.method=="GET":
         url = gen_scope_url()
-        print url
         if "code" in request.GET:
             code = request.GET.get("code", "")
             access_token_url = gen_access_token_url(code)
             dict_data = get_json_response(access_token_url)
             access_token = dict_data["access_token"]
             openid = dict_data["openid"]
-            user_info = get_json_response(access_token, openid)
+            user_info_url = gen_user_info_url(access_token, openid)
+            user_info = get_json_response(user_info_url)
+
             request.session["openid"] = openid
-            print openid
             u, created = PollUser.objects.get_or_create(openid=openid)
 
         pid = request.GET.get("pid")
         # q = Question.objects.get(poll=pid, qindex=qindex)
         q = Question.objects.filter(poll=pid)
+        q = [question.id for question in q]
         num = Question.objects.filter(poll=pid).count()
         # p = Poll.objects.get(pk=pid)
 
@@ -82,7 +83,7 @@ def home_page(request):
         })
         # RequestContext(request)
         # return render_to_response('polls/home.html',context_instance=RequestContext(request))
-        return render_to_response('polls/home.html', variables)
+        return render_to_response('polls/index.html', variables)
 def get_question(request):
     if request.method=="GET":
         pid = request.GET.get("pid")
@@ -100,7 +101,7 @@ def get_question(request):
             # "c": c,
             "num":len(q),
         })
-        return render_to_response("polls/question_gen.html", variables)
+        return render_to_response("polls/answer_gen.html", variables)
 
 def answer_question(request):
     if request.method=="POST":
@@ -121,19 +122,23 @@ def answer_question(request):
         # return HttpResponseRedirect("/polls/question/%d" % qid)
     if request.method=="GET":
         qid = request.GET["qid"]
-        q = Question.objects.get(pk=qid)
+        question = Question.objects.get(pk=qid)
         choices = Choice.objects.filter(question=qid)
         variables = RequestContext(request, {
             "choices": choices,
-            "q": q,
+            "question": question,
             })
-        return render_to_response("polls/question.html", variables)
+        return render_to_response("polls/answer.html", variables)
+        # variables = {"choices": choices, "question": question}
+        # json = simplejson.dumps(variables)
+        # return HttpResponse(json, mimetype="application/json")
 def get_result(request):
     '''获取poll下面uid每一个最近的选项作为计分项'''
     if request.method=="GET":
         total = 0
         pid = request.GET.get("pid")
-        a = Answer.objects.filter(uid=uid, pid=pid).order_by('-submit_time')
+        openid = request.GET.session("openid")
+        a = Answer.objects.filter(uid=openid, pid=pid).order_by('-submit_time')
         for answer in a:
             total += answer.cid.score
             answer.cid.votes += 1
