@@ -10,17 +10,18 @@
 <body>
     <div class="wrap">
         <img src="/static/polls/img/test.png" class="font">
-        <form>
+        <form method="post" action="">
+        {% csrf_token %}
             <div class="sex clear">
                 <dl>
                     <dt><img src="/static/polls/img/sex.png" alt=""></dt>
                     <dd>
                         <div class="a">
-                            <input type="radio" id="boy" name="gender">
+                            <input type="radio" id="boy" name="gender" value="1">
                             <label for="boy" class="boy_l"></label>
                         </div>
                         <div class="a">
-                            <input type="radio" id="lady" name="gender">
+                            <input type="radio" id="lady" name="gender" value="0">
                             <label for="lady" class="lady_l"></label>
                         </div>
                     </dd>
@@ -29,17 +30,17 @@
                     <dt><img src="/static/polls/img/age.png" alt=""></dt>
                     <dd>
                         <div class="b">
-                            <input type="radio" id="big" name="age">
+                            <input type="radio" id="big" name="age" value="1">
                             <label for="big" class="big_l"></label>
                         </div>
                         <div class="b">
-                            <input type="radio" id="little" name="age">
+                            <input type="radio" id="little" name="age" value="0">
                             <label for="little" class="little_l"></label>
                         </div>
                     </dd>
                 </dl>
             </div>
-            <div class="on"></div>
+            <button class="on" type="submit"></button>
         </form>
     </div>
 </body>
@@ -104,6 +105,10 @@
         var gender = $("input[name='gender'][checked]").val();
         var age = $("input[name='age'][checked]").val();
         var url = "{% url 'polls:home' %}"
+        var data = {
+            "gender": gender,
+            "age": age,
+        }
         // $.post(url, )
         window.location.replace("{% url 'polls:question' %}?pid=1")
     }
