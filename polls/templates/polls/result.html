@@ -4,20 +4,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title></title>
-<link rel="stylesheet" type="text/css" href="/static/polls/css/reset.css">
-<link rel="stylesheet" type="text/css" href="/static/polls/css/index.css">
+<link rel="stylesheet" type="text/css" href="/wechatapp/static/polls/css/reset.css">
+<link rel="stylesheet" type="text/css" href="/wechatapp/static/polls/css/index.css">
 </head>
 <body>
     <div class="wrap">
-        <div class="outer">
-        	<div class="inner">
-        		<h1>14分一下（含14分）:</h1>
-                <p class="result">
-                    你的睡眠不太好哦，你的睡眠不太好哦，你的睡眠不太好哦，你的睡眠不太好哦，你的睡眠不太好哦，你的睡眠不太好哦，你的睡眠不太好哦你的睡眠不太好哦你的睡眠不太好哦.
-                </p>
-        	</div>
+        <img src="/wechatapp/static/polls/img/test.png" class="font">
+        <div class="outer" style="margin-top:7%;">
+            <div class="inner">
+                {% if total > 24 %}
+                <div class="choice">
+                    <h1>24-28分(不含24分):</h1>
+                    <p class="result">
+                        啥也不说了，你是陈抟老祖式的睡仙，长寿非你莫属
+                    </p>
+                </div>
+                {% endif %}
+                {% if total > 20 and total <= 24 %}
+                <div class="choice">
+                    <h1>20-24分 (不含20分):</h1>
+                    <p class="result">
+                    不错，你是睡美人式的睡仙，可以睡上100年仍然美丽。
+                    </p>
+                </div>
+                {% endif %}
+                {% if total > 14 and total <= 20 %}
+                <div class="choice">
+                    <h1>14-20分 (不含14分):</h1>
+                    <p class="result">
+                    你有时候睡得好，有时候稍差，是人神交替式，只要调整好心态，注意养成良好睡眠习惯，你就会一直奔着睡仙去了哦。
+                    </p>
+                </div>
+                {% endif %}
+                {% if total <= 14 %}
+                <div class="choice">
+                    <h1>14分一下(含14分):</h1>
+                    <p class="result">
+                    你的睡眠不太好哦，就不给你封睡仙了。注意调整心态，养成良好的睡眠习惯。如果还不能改善你的睡眠状况，试试我给你提供的睡眠解决方案？我们的口号是，深睡，自然醒。
+                    </p>
+                </div>
+                {% endif %}
+            </div>
         </div>
-        <a href="{% url 'polls/home' %}" class="more"></a>
+        <a href="{% url 'polls:home' %}" class="more"></a>
         <a href="" class="share"></a>
     </div>
 </body>

@@ -3,53 +3,9 @@
 </p>
 <div class="answer">
     {% for choice in choices %}
-    <div class="clear">
-        <input id="{{choice.id}}" name="vote" type="radio">
+    <div class="clear clear1">
+        <input id="{{choice.id}}" class="vote" name="vote" type="radio">
         <label>{{ choice.choice_desc }}</label>
     </div>
     {% endfor %}
 </div>
-<script type="text/javascript">
-    var csrftoken = getCookie('csrftoken');
-    var i = $("body").data("i");
-    var num = $("body").data("num");
-    var q = $("body").data("q");
-    if (i==0){
-        $(".inner").load("{% url 'polls:answer_question' %}?pid=1&qid="+q[0]);
-    }
-
-    function getNext(q, i){
-        var choiceId = $("input[name='vote'][checked]").attr("id");
-        var qId = $(".question").attr("id");
-        // var qIndex = $(".question_index").attr("id");
-        var data = {
-            "qid": qId,
-            "cid": choiceId,
-            "csrfmiddlewaretoken": csrftoken
-        };
-        var url = "{% url 'polls:answer_question' %}?pid=1&qid="+q[i];
-        if (i<=num-1){
-            alert("before:"+i);
-            $(".inner").load("{% url 'polls:answer_question' %}?pid=1&qid="+q[i+1]);
-            i++;
-            alert("after:"+i);
-            }else{
-                window.location.replace("{% url 'polls:result' %}");
-            }
-        // $.post(url, data,
-        //     function(){
-        //         if (i<num){
-        //             $(".question").load("{% url 'polls:answer_question' %}?pid=1&qid="+q[i+1]);
-        //             i++;
-        //         }else{
-        //             window.location.replace("{% url 'polls:result' %}")
-        //         }
-        //     });
-    }
-
-    $(".clear").click(function(q, i){
-        $(this).children('input').attr("checked",true);
-        $(this).siblings().children('input').attr("checked",false);
-        getNext(q, i);
-    })
-</script>

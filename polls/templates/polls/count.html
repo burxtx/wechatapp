@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title></title>
+<link rel="stylesheet" type="text/css" href="static/css/reset.css">
+<link rel="stylesheet" type="text/css" href="static/css/index.css">
+</head>
+<body>
+    <div class="wrap">
+        <img src="static/img/test.png" class="font">
+        <div class="outer">
+            <div class="inner">
+                {% for question in q %}
+                <p class="question">
+                    &nbsp;(&nbsp;<span>{{ question.qindex }}</span>&nbsp;)&nbsp;{{ question.question_desc }}
+                </p>
+                <div class="answer">
+                    <div class="clear clear1">
+                        <input type="radio">
+                        <label>{{ choice.choice_desc}}</label>
+                        <p class="out">
+                            <span class="in">{{ choice.votes }}</span>
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+                <p class="question" style="margin-left:5%;">
+                    参加测试的总人数为:  人。
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="static/js/jquery.js"></script>
+<script type="text/javascript">
+    var w = $(".in").html();
+    $(".in").css("width",w+'%');
+</script>
+</html>
