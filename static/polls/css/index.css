@@ -1,12 +1,12 @@
 .wrap{
     width: 100%;
     background: url(../img/back.jpg);
-    background-size: cover;
+    background-size: 100% 100%;
     overflow: hidden;
 }
 .font{
     width: 64%;
-    margin:7% 16%;
+    margin:7% 18%;
 }
 .sex{
     width: 100%;
@@ -83,14 +83,15 @@ label{
     width: 50%;
     height: 3.5em;
     border:none;
+    /*background: orange;*/
     background: url(../img/on.png) no-repeat;
     background-size: contain;
-    margin: 11% auto;
+    margin: 15% auto;
 }
 /*开始答题*/
 .outer{
     width: 80%;
-    margin: 12% 10% 25% 10%;
+    margin: 15% 10% 25% 10%;
     background: black;
     opacity: 0.8;
     border-radius: 3px;
@@ -101,7 +102,6 @@ label{
     margin: 3%;
     border: 1px dashed #797778;
     border-radius: 4px;
-    /*padding: 2%;*/
 }
 .question,.inner h1,.result{
     color: white;
@@ -112,28 +112,29 @@ label{
     margin-left: 2%;
 }
 .answer{
-    margin-bottom: 18%;
+    margin-bottom: -5%;
     margin-top: 5%;
     margin-left: 7%;
 }
 .clear1{
     width: 95%;
-    overflow: hidden;
+    margin-bottom: 3em;
+    position: relative;
 }
 .answer input{
-    /*float: left;*/
     display: block;
-    /*margin-left: -2%; 
-    margin-top: 3%;*/
+    line-height: 2.3em;
+    position: absolute;
+    top: -1%;
+    left: 0;
 }
 .answer label{
-    /*float: right;*/
+    position: absolute;
+    top: 3%;
+    left: 5%;
     display: block;
     color: white;
     font-size: 1em;
-    line-height: 2em;
-    margin-top: -9%;
-    margin-left: 11%;
 }
 /*结果*/
 .inner h1{
@@ -145,12 +146,12 @@ label{
     padding: 0 5%;
 }
 .more,.share{
-    margin-top: -17%;
+    margin-top: 11%;
     float: left;
     display: block;
     width: 31%;
     height: 4em;
-    margin-bottom: 5%;
+    margin-bottom: 15%;
 }
 .more{
     margin-left: 17%;
@@ -162,18 +163,18 @@ label{
     background: url(../img/share.png) no-repeat;
     background-size: contain;
 }
+.choice{
+    padding-top: 5%;
+    padding-bottom: 10%;
+}
 /*统计条*/
 .out{
-    /*float: left;*/
-    clear: both;
-    width: 50%;
-    margin-left: 12%;
-    margin-top: -3%;
-    /*margin-bottom: 5%;*/
+    width: 90%;
     border: 1px solid white;
     border-radius: 5px;
     line-height: 1.2em;
     height: 0.8em;
+    float: left;
 }
 .in{
     display: block;
@@ -181,4 +182,16 @@ label{
     background: white;
     line-height: 0.8em;
     height: 0.8em;
+    color: #fe5b0b;
+}
+.backs{
+    background: url(/wechatapp/static/polls/img/back.jpg);
+    background-size: cover;
+}
+.pp{
+    margin-left: 0%;
+    margin-bottom: 3%;
+    color: white;
+    font-size: 1em;
+    line-height: 1.2em;
 }

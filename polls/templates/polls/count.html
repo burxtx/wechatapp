@@ -3,39 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title></title>
-<link rel="stylesheet" type="text/css" href="static/css/reset.css">
-<link rel="stylesheet" type="text/css" href="static/css/index.css">
+<title>{{ poll.poll_name }}</title>
+<link rel="stylesheet" type="text/css" href="/wechatapp/static/polls/css/reset.css">
+<link rel="stylesheet" type="text/css" href="/wechatapp/static/polls/css/index.css">
+<script src="/wechatapp/static/polls/js/jquery.js"></script>
+<style type="text/css">
+    .ii{
+        float: right;
+        color: orange;
+        margin-top: -6%;
+    }
+</style>
 </head>
 <body>
-    <div class="wrap">
-        <img src="static/img/test.png" class="font">
+    <div class="wrap backs">
+        <img src="/wechatapp/static/polls/img/test.png" class="font">
         <div class="outer">
             <div class="inner">
                 {% for question in q %}
                 <p class="question">
                     &nbsp;(&nbsp;<span>{{ question.qindex }}</span>&nbsp;)&nbsp;{{ question.question_desc }}
                 </p>
-                <div class="answer">
-                    <div class="clear clear1">
-                        <input type="radio">
-                        <label>{{ choice.choice_desc}}</label>
-                        <p class="out">
-                            <span class="in">{{ choice.votes }}</span>
-                        </p>
+                    {% for choice in c %}
+                    {% if choice.question.id == question.id %}
+                    <div class="answer">
+                        <div class="clear clear1">
+                            <p class="pp">{{choice.cindex}}. {{ choice.choice_desc}}</p>
+                            <p class="out">
+                                <span class="in proportion" id="in" style="color:transparent;">{{choice.votes}}</span>
+                                <i class="ii">222</i>
+                            </p>
+                        </div>
                     </div>
-                </div>
+                    <script type="text/javascript">
+                        // $("body").data("votes", {{ choice.votes }});
+                        $("body").data("c_count", {{ c_count }});
+                        // var votes = parseInt("{{ choice.votes }}");
+                        // var c_count = parseInt("{{ c_count }}");
+                        // alert(votes+"haha"+c_count);
+                        // // $(document).ajaxComplete(function(){
+                        // $(".proportion").text((votes/c_count)*100);
+                        // // });
+                    </script>
+                    {% endif %}
+                    {% endfor %}
                 {% endfor %}
                 <p class="question" style="margin-left:5%;">
-                    参加测试的总人数为:  人。
+                    参加测试的总人数为:  {{ user_count }}人。
                 </p>
             </div>
         </div>
     </div>
 </body>
-<script src="static/js/jquery.js"></script>
 <script type="text/javascript">
-    var w = $(".in").html();
-    $(".in").css("width",w+'%');
+    var c_count = parseInt("{{ c_count }}");
+    var user_count = parseInt("{{ user_count }}")
+    var c_choice = parseInt("{{ choice.votes }}");
+    window.onload = function move(){
+        var sum = 0 ;
+        var len = $(".in").length;
+        var w=new Array();
+        var arr = new Array();
+        var x = new Array();
+        var w1;
+        for(var i = 0;i<len;i++){
+            w = $('.in').eq(i).html();
+            w1 = parseInt(w);
+            sum= sum+w1;
+            
+
+        }
+        var sum2=sum/7;    
+            // arr.push(sum2); 
+        
+        for(var j = 0;j<len;j++){
+            w = $('.in').eq(j).html();
+
+            // alert(a,b)
+            // x.push(a/b);
+            // x[j] = /; 
+            // alert(w)   
+            var y =  w/sum2;
+            // alert(y)
+            $(".in").eq(j).css("width",y*100+'%');
+            var abc = Math.floor(y*100);
+            $('.ii').eq(j).html(abc);
+
+        
+        }
+    }
+    
+
 </script>
 </html>

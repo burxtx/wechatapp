@@ -17,15 +17,18 @@ from urllib import quote
 # pdb.set_trace()
 
 def gen_scope_url():
-    APPID = "wx455601ff052bea31" #随手换测试号
-    REDIRECT_URI = quote("http://yikf.jiutianwai.com/wechatapp/polls/home?pid=1") #调查系统url
+    # APPID = "wx455601ff052bea31" #随手换测试号
+    APPID = "wxff35be27e6a08ec6" # YIMI 服务号
+    REDIRECT_URI = quote("http://co.jiutianwai.com/wechatapp/polls/home?pid=1") #调查系统url
     SCOPE = "snsapi_userinfo"
     url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect"\
     % (APPID, REDIRECT_URI, SCOPE)
     return url
 def gen_access_token_url(code):
-    APPID = "wx455601ff052bea31"
-    SECRET = "647bb7f32155cb2b794337145debf105"
+    # APPID = "wx455601ff052bea31"
+    APPID = "wxff35be27e6a08ec6"
+    # SECRET = "647bb7f32155cb2b794337145debf105"
+    SECRET = "8f600f40c55d7f996f43daeca938228e"
     CODE = code
     url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"\
     % (APPID, SECRET, CODE)
@@ -59,6 +62,7 @@ def home_page(request):
             return HttpResponseRedirect("/wechatapp/polls/question?pid=1")
     if request.method=="GET":
         url = gen_scope_url()
+        print url
         if "code" in request.GET:
             code = request.GET.get("code", "")
             access_token_url = gen_access_token_url(code)
@@ -84,6 +88,7 @@ def home_page(request):
             "q": q,
             # "c": c,
             "num":len(q),
+            "url": url,
         })
         # RequestContext(request)
         # return render_to_response('polls/home.html',context_instance=RequestContext(request))
@@ -121,9 +126,7 @@ def answer_question(request):
         u = PollUser.objects.get(openid=openid)
         a = Answer.objects.filter(uid=u, pid=poll, qid=question).first()
         if a == None:
-            print "111"
             a = Answer.objects.create(uid=u, pid=poll, qid=question, cid=choice)
-            print "222"
         else:
             a.cid = choice
         # print created
@@ -151,27 +154,53 @@ def get_result(request):
         poll = Poll.objects.get(id=pid)
         openid = request.session["openid"]
         u = PollUser.objects.get(openid=openid)
-        a = Answer.objects.filter(uid=u, pid=poll).order_by('-submit_time')
+        a = Answer.objects.filter(uid=u, pid=poll)
         for answer in a:
-            total += answer.cid.score
+            choice = Choice.objects.get(id=answer.cid.id)
+            total += choice.score
             print "answer: %s" % answer.cid.score
-            answer.cid.votes += 1
+            choice.votes += 1
+            choice.save()
         print "total: %s" % total 
         variables = RequestContext(request, {
             "total": total,
         })
         return render_to_response("polls/result.html", variables)
 
-# def response_chart(request):
-#     q = Question.objects.all()
-#     # c = Choice.objects.all()
-#     votes_count = 0
-#     user_count = 0
-#     for question in q:
-#         c = Choice.objects.filter(question=question)
-#             for choice in c:
-#                 c_count = Answer.objects.filter(cid=c, qid=q).count()
-#                 q_count = Answer.objects.filter(qid=q).count()
-#                 c_proportion = c_count/q_count
+def response_total(request):
+    if request.method=="GET":
+        pid = request.GET["pid"]
+        poll = Poll.objects.get(id=pid)
+        q = Question.objects.filter(poll=poll).order_by("qindex")
+        # c_list = []
+        # for question in q:
+        #     c = Choice.objects.filter(question=question).order_by("cindex")
+        #     c_list.append(c)
+        c = Choice.objects.all()
+        c_count = Answer.objects.filter(pid=poll).count()
+        user_count = PollUser.objects.all().count()
+        # for question in q:
+        #     c_count = Answer.objects.filter(qid=question).count()
 
-#     return render_to_response("polls/count.html")
+        variables=RequestContext(request,{
+            "poll": poll,
+            "q": q,
+            "c": c,
+            "c_count": c_count,
+            "user_count": user_count,
+            })
+        return render_to_response("polls/count.html", variables)
+# def response_single(request):
+#     if request.method=="GET":
+#         pid = request.GET["pid"]
+#         pid = request.GET["qid"]
+#         poll = Poll.objects.get(id=pid)
+#         q = Question.objects.filter(pid=poll)
+#         for question in q:
+#             c = Choice.objects.filter(question=question)
+#             c_proportion_list = []
+#             for choice in c:
+#                 choice_count = Answer.objects.filter(cid=choice, qid=question).count()
+#                 question_count = Answer.objects.filter(qid=question).count()
+#                 c_proportion = c_count/q_count
+#                 c_proportion_list.append(c_proportion)
