@@ -14,21 +14,15 @@ import pdb
 import urllib2, json
 from urllib import quote
 
+from conf import APPID, SECRET, SCOPE
 # pdb.set_trace()
 
 def gen_scope_url():
-    # APPID = "wx455601ff052bea31" #随手换测试号
-    APPID = "wxff35be27e6a08ec6" # YIMI 服务号
-    REDIRECT_URI = quote("http://co.jiutianwai.com/wechatapp/polls/home?pid=1") #调查系统url
-    SCOPE = "snsapi_userinfo"
+    REDIRECT_URI = quote("http://comun.jiutianwai.com/wechatapp/polls/home?pid=1") #调查系统url
     url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect"\
     % (APPID, REDIRECT_URI, SCOPE)
     return url
 def gen_access_token_url(code):
-    # APPID = "wx455601ff052bea31"
-    APPID = "wxff35be27e6a08ec6"
-    # SECRET = "647bb7f32155cb2b794337145debf105"
-    SECRET = "8f600f40c55d7f996f43daeca938228e"
     CODE = code
     url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"\
     % (APPID, SECRET, CODE)
@@ -46,7 +40,7 @@ def home_page(request):
         if request.session.has_key("openid"):
             openid = request.session["openid"]
             nickname = request.session["nickname"]
-            print openid
+            # print openid
             u, created = PollUser.objects.get_or_create(openid=openid)
             gender = request.POST['gender']
             age = request.POST['age']
@@ -55,14 +49,13 @@ def home_page(request):
             u.nickname = nickname
             u.gender = int(gender)
             u.age = int(age)
-            print u.age
             u.save()
             # json = simplejson.dumps({'success': True})
             # return HttpResponse(json, mimetype='application/json')
             return HttpResponseRedirect("/wechatapp/polls/question?pid=1")
     if request.method=="GET":
         url = gen_scope_url()
-        print url
+        # print url
         if "code" in request.GET:
             code = request.GET.get("code", "")
             access_token_url = gen_access_token_url(code)
@@ -190,17 +183,3 @@ def response_total(request):
             "user_count": user_count,
             })
         return render_to_response("polls/count.html", variables)
-# def response_single(request):
-#     if request.method=="GET":
-#         pid = request.GET["pid"]
-#         pid = request.GET["qid"]
-#         poll = Poll.objects.get(id=pid)
-#         q = Question.objects.filter(pid=poll)
-#         for question in q:
-#             c = Choice.objects.filter(question=question)
-#             c_proportion_list = []
-#             for choice in c:
-#                 choice_count = Answer.objects.filter(cid=choice, qid=question).count()
-#                 question_count = Answer.objects.filter(qid=question).count()
-#                 c_proportion = c_count/q_count
-#                 c_proportion_list.append(c_proportion)

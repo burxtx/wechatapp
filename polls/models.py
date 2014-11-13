@@ -50,22 +50,22 @@ class PollUser(models.Model):
     MALE = 1
     FEMALE = 0
     GENDER_CHOICE = (
-        (MALE, 'Male'),
-        (FEMALE, 'Female'),
+        (MALE, '男'),
+        (FEMALE, '女'),
         )
     LT35 = 1
     ST35 = 0
     AGE_CHOICE = (
-        (LT35, 'Large'),
-        (ST35, 'Small'),
+        (LT35, '大于35'),
+        (ST35, '小于35'),
         )
     # username = models.CharField()
-    age = models.IntegerField(choices=AGE_CHOICE, null=True, blank=True)
-    gender = models.IntegerField(choices=GENDER_CHOICE, null=True, blank=True)
+    age = models.IntegerField(choices=AGE_CHOICE, null=True, blank=True, verbose_name="年龄")
+    gender = models.IntegerField(choices=GENDER_CHOICE, null=True, blank=True, verbose_name="性别")
 
     # subscribe = models.IntegerField()
     openid = models.CharField(max_length=500, null=True, blank=True)
-    nickname = models.CharField(max_length=200, null=True, blank=True)
+    nickname = models.CharField(max_length=200, null=True, blank=True, verbose_name="名字")
     sex = models.IntegerField(null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
     country = models.CharField(max_length=100, null=True, blank=True)
@@ -75,15 +75,32 @@ class PollUser(models.Model):
     privilege = models.CharField(max_length=200, null=True, blank=True)
     # subscribe_time = models.DateTimeField(null=True, blank=True)
     def __unicode__(self):
-        return '%s, %s' % (self.age, self.gender)
- 
+        # return '%s, %s' % (self.age, self.gender)
+        return self.nickname
+
 class Answer(models.Model):
     """docstring for Answer"""
-    pid = models.ForeignKey(Poll)
-    qid = models.ForeignKey(Question)
-    cid = models.ForeignKey(Choice)
-    uid = models.ForeignKey(PollUser)
+    pid = models.ForeignKey(Poll, null=True, blank=True)
+    qid = models.ForeignKey(Question, null=True, blank=True)
+    cid = models.ForeignKey(Choice, null=True, blank=True)
+    uid = models.ForeignKey(PollUser, null=True, blank=True)
     submit_time = models.DateTimeField(auto_now_add=True)
     #add answer date and time
     def __unicode__(self):
-        return self.cid
+        return self.cid and self.cid.choice_desc or ''
+
+    def get_u_age(self):
+        return self.uid and self.uid.get_age_display() or ''
+    get_u_age.short_description = '年龄'
+
+    def get_u_gender(self):
+        return self.uid and self.uid.get_gender_display() or ''
+    get_u_gender.short_description = '性别'
+
+    def get_q_question_desc(self):
+        return self.qid and self.qid.question_desc or ''
+    get_q_question_desc.short_description = '问题'
+
+    def get_c_choice_desc(self):
+        return self.cid and self.cid.choice_desc or ''
+    get_c_choice_desc.short_description = '选择'

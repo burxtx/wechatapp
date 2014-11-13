@@ -139,14 +139,29 @@
 </script>
 <script src="http://static.jiutianwai.com/static/js/wx_share.js"></script>
 <script type="text/javascript">
-    var APPID = "wxff35be27e6a08ec6";
-    var REDIRECT_URI = encodeURIComponent("http://co.jiutianwai.com/wechatapp/polls/home?pid=1");
+    var APPID = "wx069be016c314950b";
+    var REDIRECT_URI = encodeURIComponent("http://comun.jiutianwai.com/wechatapp/polls/home?pid=1");
     var SCOPE = "snsapi_userinfo";
     var url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+APPID+"&redirect_uri="+REDIRECT_URI+"&response_type=code&scope="+SCOPE+"&state=STATE#wechat_redirect"
-    var imgUrl = "http://co.jiutianwai.com/wechatapp/static/polls/img/aaa.jpg";
+    var imgUrl = "http://comun.jiutianwai.com/wechatapp/static/polls/img/aaa.jpg";
     var lineLink = url;
     var descContent = '';
     var shareTitle = '测测你的睡仙指数';
     var appid = '';
+    
+    function onBridgeReady(){
+ WeixinJSBridge.call('showOptionMenu');
+}
+
+if (typeof WeixinJSBridge == "undefined"){
+    if( document.addEventListener ){
+        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+    }else if (document.attachEvent){
+        document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+        document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+    }
+}else{
+    onBridgeReady();
+}
 </script>
 </html>
